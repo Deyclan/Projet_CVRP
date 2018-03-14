@@ -1,4 +1,4 @@
-package main.java.Algorithmes;
+package Algorithmes;
 
 public class Genetique {
 }

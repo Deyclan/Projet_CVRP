@@ -1,0 +1,53 @@
+package Utils;
+
+import java.util.*;
+
+public class SolutionGenerator {
+
+    private final static int CAPACITE = 100;
+
+
+    public Solution generateSolutionAleatoire(List<Client> clientList, int nombreVoiture) throws Exception {
+        List<List<Client>> tournees = new ArrayList<List<Client>>();
+        List<Integer> capaciteTournees = new ArrayList<Integer>();
+        Random random = new Random();
+        for (int i = 0 ; i<nombreVoiture ; i++) {
+            List<Client> tmp = new LinkedList<Client>();
+            tmp.add(clientList.get(0));                         // On ajoute le dépot au départ
+            tournees.add(tmp);
+            capaciteTournees.add(0);
+        }
+        for (Client client : clientList) {
+            int randomIndex = random.nextInt(nombreVoiture);
+            fillTournee(randomIndex, client, nombreVoiture, capaciteTournees, tournees, 0);
+        }
+        for (int i = 0 ; i<nombreVoiture ; i++) {               // On ajoute le dépot à la fin
+            tournees.get(i).add(clientList.get(0));
+        }
+
+        return new Solution(clientList, nombreVoiture, tournees,  CAPACITE);
+    }
+
+
+    public Solution generateSolutionAleatoireRepartie(){
+        // TODO
+        return null;
+    }
+    public Solution permuteClient(){
+        // TODO
+        return null;
+    }
+
+    private void fillTournee(int index, Client client, int nombreVoiture, List<Integer> capaciteTournees, List<List<Client>> tournees, int conditionArret) throws Exception {
+        if (capaciteTournees.get(index) + client.getQuatiteCommande() < CAPACITE){
+            tournees.get(index).add(client);
+            capaciteTournees.set(index, capaciteTournees.get(index) + client.getQuatiteCommande());
+        }
+        else {
+            if ( conditionArret > nombreVoiture ){
+                throw new Exception("la quantité a livrer est trop grande pour le nombre de voiture disponible ( la génération de solution a échouée )");
+            }
+            fillTournee((index + 1) % nombreVoiture, client, nombreVoiture, capaciteTournees, tournees, conditionArret + 1);
+        }
+    }
+}
