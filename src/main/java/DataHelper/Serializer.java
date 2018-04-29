@@ -13,11 +13,11 @@ public class Serializer {
 
     private File data;
 
-    public Serializer(int i){
+    public Serializer(int numeroFichierData){
 
         ClassLoader classLoader = getClass().getClassLoader();
 
-        switch (i){
+        switch (numeroFichierData){
             case 1:
                 System.out.println("loading file data01.txt");
                 data =  new File(classLoader.getResource("data01.txt").getFile());

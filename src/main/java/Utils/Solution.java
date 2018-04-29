@@ -3,6 +3,7 @@ package Utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Solution {
 
@@ -85,10 +86,29 @@ public class Solution {
     }
 
 
-    @Override
-    public String toString() {
-        // TODO
-        return super.toString();
+    public void printTournees() {
+        int numeroTournee = 1;
+
+        for (List<Client> tournee : tournees) {
+            System.out.println("Tournee "+numeroTournee);
+
+            System.out.println("ID");
+            System.out.println(tournee.stream()
+                    .map(c -> c.getId()+"")
+                    .collect(Collectors.joining(" => ")));
+
+            System.out.println("Qt Commande");
+            System.out.println(tournee.stream()
+                    .map(c -> c.getQuatiteCommande()+"")
+                    .collect(Collectors.joining(" => ")));
+
+            System.out.println("Positions");
+            System.out.println(tournee.stream()
+                    .map(c -> "("+c.getX()+","+c.getY()+")")
+                    .collect(Collectors.joining(" => ")));
+            System.out.println();
+            numeroTournee++;
+        }
     }
 
     /**

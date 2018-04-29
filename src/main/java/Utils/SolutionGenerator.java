@@ -28,6 +28,11 @@ public class SolutionGenerator {
         return new Solution(clientList, nombreVoiture, tournees,  CAPACITE);
     }
 
+    public int getNbMinVoiture(List<Client> clientList){
+        return (int) Math.floor(clientList.stream()
+                .mapToInt(client -> client.getQuatiteCommande())
+                .sum() / CAPACITE )+1;
+    }
 
     public Solution generateSolutionAleatoireRepartie(){
         // TODO
