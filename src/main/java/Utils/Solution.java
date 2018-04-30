@@ -133,4 +133,6 @@ public class Solution {
     public void setCoutTotal(double coutTotal) {
         this.coutTotal = coutTotal;
     }
+    public int getCapacite() { return capacite; }
+    public void setCapacite(int capacite) { this.capacite = capacite; }
 }

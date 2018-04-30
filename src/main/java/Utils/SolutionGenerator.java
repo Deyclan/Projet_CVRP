@@ -38,9 +38,12 @@ public class SolutionGenerator {
         // TODO
         return null;
     }
-    public Solution permuteClient(){
-        // TODO
-        return null;
+    public Solution permuteClientFromPosi(Solution solution, int numTournee1, int numTournee2,int posiClient1, int posiClient2){
+        Client premierClient = solution.getTournees().get(numTournee1).get(posiClient1);
+        Client deuxiemeClient = solution.getTournees().get(numTournee2).get(posiClient2);
+        solution.getTournees().get(numTournee1).set(posiClient1, deuxiemeClient);
+        solution.getTournees().get(numTournee2).set(posiClient2, premierClient);
+        return solution;
     }
 
     private void fillTournee(int index, Client client, int nombreVoiture, List<Integer> capaciteTournees, List<List<Client>> tournees, int conditionArret) throws Exception {

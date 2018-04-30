@@ -31,8 +31,8 @@ public class TestSolutionGenerator {
 
         SolutionGenerator solutionGenerator = new SolutionGenerator();
         try {
-            System.out.println("Nombre de voiture minimal : " + solutionGenerator.getNbMinVoiture(clients));
-            System.out.println("Entrez le nombre de voiture pour la génération aléatoire : ");
+            System.out.println("Nombre de voitures minimal : " + solutionGenerator.getNbMinVoiture(clients));
+            System.out.println("Entrez le nombre de voitures pour la génération aléatoire : ");
             int nbVoiture = scanner.nextInt();
             Solution solution = solutionGenerator.generateSolutionAleatoire(clients, nbVoiture);
             solution.printTournees();

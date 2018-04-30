@@ -18,8 +18,8 @@ public class Main {
         List<Client> clients = serializer.serialize();
 
         try{
-            System.out.println("Nombre de voiture minimal : " + generator.getNbMinVoiture(clients));
-            System.out.println("Entrez le nombre de voiture pour la génération aléatoire : ");
+            System.out.println("Nombre de voitures minimal : " + generator.getNbMinVoiture(clients));
+            System.out.println("Entrez le nombre de voitures pour la génération aléatoire : ");
             int nbVoiture = scanner.nextInt();
             Solution solution = generator.generateSolutionAleatoire(clients, nbVoiture);
             solution.printTournees();
