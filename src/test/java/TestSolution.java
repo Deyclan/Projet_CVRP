@@ -17,13 +17,13 @@ public class TestSolution {
         Client client6 = new Client(6,4,0,0);
 
         List<Client> clients = new ArrayList<Client>();
+        clients.add(depot);
         clients.add(client1);
         clients.add(client2);
         clients.add(client3);
         clients.add(client4);
         clients.add(client5);
         clients.add(client6);
-        clients.add(depot);
 
         List<Client> tournee1 = new ArrayList<Client>();
         tournee1.add(depot);
