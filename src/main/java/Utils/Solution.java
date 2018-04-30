@@ -176,7 +176,10 @@ public class Solution {
                     .collect(Collectors.joining(" => ")));
             numeroTournee++;
         }
-        System.out.println();
+    }
+
+    public void printCoutTotal(){
+        System.out.println(Constants.ANSI_CYAN + "Cout total solution : "+getCoutTotal() + Constants.ANSI_RESET);
     }
 
     /**

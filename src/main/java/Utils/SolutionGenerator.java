@@ -30,6 +30,14 @@ public class SolutionGenerator {
         return new Solution(clientList, nombreVoiture, tournees,  CAPACITE);
     }
 
+    public List<Solution> generateListeSolutionAleatoire(List<Client> clientList, int nombreVoiture, int tailleListe) throws Exception {
+        List<Solution> population = new ArrayList<>();
+        for (int i=0 ; i<tailleListe ; i++){
+            population.add(generateSolutionAleatoire(clientList, nombreVoiture));
+        }
+        return population;
+    }
+
     public int getNbMinVoiture(List<Client> clientList){
         return (int) Math.floor(clientList.stream()
                 .mapToInt(client -> client.getQuatiteCommande())
