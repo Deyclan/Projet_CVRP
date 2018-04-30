@@ -18,8 +18,10 @@ public class SolutionGenerator {
             capaciteTournees.add(0);
         }
         for (Client client : clientList) {
-            int randomIndex = random.nextInt(nombreVoiture);
-            fillTournee(randomIndex, client, nombreVoiture, capaciteTournees, tournees, 0);
+            if (!client.equals(clientList.get(0))) {    // Si c'est le dépôt on l'ajoute pas
+                int randomIndex = random.nextInt(nombreVoiture);
+                fillTournee(randomIndex, client, nombreVoiture, capaciteTournees, tournees, 0);
+            }
         }
         for (int i = 0 ; i<nombreVoiture ; i++) {               // On ajoute le dépot à la fin
             tournees.get(i).add(clientList.get(0));

@@ -1,11 +1,12 @@
 package Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Solution {
+
+    private final static int CAPACITE = 100;
+
 
     private List<Client> clients;
     private int nombreVoiture;
@@ -85,6 +86,60 @@ public class Solution {
         return totalClients.size() == clients.size() ;
     }
 
+    public void repareSolution() throws Exception {
+        List<Client> clientsParcourus = new ArrayList<>();
+        Map<Client, Integer> clientsASupprimer = new HashMap<>();
+        List<Client> clientsARajouter = new ArrayList<>();
+
+        // On parcourt toutes les tournées et on regarde quels clients sont en double
+        for (int i=0; i< tournees.size() ; i++) {
+            List<Client> tournee = tournees.get(i);
+            for (Client client: tournee){
+                if (client.getId() != 0) {
+                    if (clientsParcourus.contains(client)) {
+                        clientsASupprimer.put(client, i);
+                    } else {
+                        clientsParcourus.add(client);
+                    }
+                }
+            }
+        }
+
+        // On regarde quels clients ont étés oubliés
+        for (Client client: clients) {
+            if (!clientsParcourus.contains(client) && client.getId() != 0){
+                clientsARajouter.add(client);
+            }
+        }
+
+        // Pour chaque client a supprimer, on retire le doublons
+        for (Map.Entry<Client, Integer> entry : clientsASupprimer.entrySet()) {
+            tournees.get(entry.getValue()).remove(entry.getKey());
+
+            // Si il y'a des clients a rajouter, on en rajoute un ici si possible
+            if (clientsARajouter.size() > 0 && coutTournee(tournees.get(entry.getValue()))+clientsARajouter.get(0).getQuatiteCommande() < CAPACITE){
+                tournees.get(entry.getValue()).add(tournees.get(entry.getValue()).size()-1, clientsARajouter.get(0));
+                clientsARajouter.remove(0);
+            }
+        }
+
+        // S'il y'en a encore à ajouter, on le fait ici
+        if( clientsARajouter.size() > 0){
+            Random random = new Random();
+            int count = 0;
+            while (clientsARajouter.size() > 0 && count < 1000){
+                int temp = random.nextInt(tournees.size());
+                if (coutTournee(tournees.get(temp)) + clientsARajouter.get(0).getQuatiteCommande() <= CAPACITE) {
+                    tournees.get(temp).add(tournees.get(temp).size()-1, clientsARajouter.get(0));
+                    clientsARajouter.remove(0);
+                }
+                count++;
+            }
+            if (!clientsARajouter.isEmpty()){
+                throw new Exception("Impossible de rajouter le ou les clients manquant aux tournées actuelles. Ajoutez une voiture au moins pour corriger le problème");
+            }
+        }
+    }
 
     public void printTournees() {
         int numeroTournee = 1;
@@ -111,10 +166,26 @@ public class Solution {
         }
     }
 
+    public void printTourneesId(){
+        int numeroTournee = 1;
+
+        for (List<Client> tournee : tournees) {
+            System.out.println("Tournee " + numeroTournee);
+            System.out.println(tournee.stream()
+                    .map(c -> c.getId() + "")
+                    .collect(Collectors.joining(" => ")));
+            numeroTournee++;
+        }
+        System.out.println();
+    }
+
     /**
      * GETTERS & SETTERS
      */
 
+    public double coutTournee(List<Client> clientList){
+        return clientList.stream().mapToInt(c -> c.getQuatiteCommande()).sum();
+    }
     public List<Client> getClients() {
         return clients;
     }
