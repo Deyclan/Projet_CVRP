@@ -5,12 +5,12 @@ import Utils.SolutionGenerator;
 
 public class RecuitSimule {
 
-    private int tempActuelle;
-    private int tempRefroidissement;
+    private double tempActuelle;
+    private double tempRefroidissement;
     private Solution solutionActuelle;
     private SolutionGenerator solutionGenerator;
 
-    public RecuitSimule(int tempInitiale, int tempRefroidissement, Solution solutionActuelle, SolutionGenerator solutionGenerator) {
+    public RecuitSimule(double tempInitiale, double tempRefroidissement, Solution solutionActuelle, SolutionGenerator solutionGenerator) {
         this.tempActuelle = tempInitiale;
         this.tempRefroidissement = tempRefroidissement;
         this.solutionActuelle = solutionActuelle;
@@ -54,7 +54,7 @@ public class RecuitSimule {
             do{
                 posClient1 = choisirRandClient(nouvelleSolution, numTournee1);
                 posClient2 = choisirRandClient(nouvelleSolution, numTournee2);
-            } while( posClient1!=0 && posClient1!=tailleTournee1 && posClient2!=0 && posClient2!=tailleTournee2);
+            } while( posClient1==0 || posClient1==tailleTournee1-1 || posClient2==0 || posClient2==tailleTournee2-1);
 
             // Echanger les clients de tournées différentes
             solutionGenerator.permuteClientFromPosi(nouvelleSolution, numTournee1, numTournee2, posClient1, posClient2);
