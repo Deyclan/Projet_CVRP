@@ -14,9 +14,9 @@ public class MainRecuit {
 
     private static int NUMERO_FICHIER_DATA = 1;
     private static int TEMPERATURE_INITIALE_RECUIT = 100;
-    private static double TEMPS_REFROIDISSEMENT = 0.2;
-    private static int NOMBRE_DE_REFROIDISSEMENT = 100000;
-    private static int NOMBRE_DE_TIRAGE_ALEATOIRE = 2000;
+    private static double TEMPS_REFROIDISSEMENT = 0.3;
+    private static int NOMBRE_DE_REFROIDISSEMENT = 3;
+    private static int NOMBRE_DE_TIRAGE_ALEATOIRE = 2;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
