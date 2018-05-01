@@ -68,14 +68,14 @@ public class RecuitSimule {
                     solutionActuelle = new Solution(nouvelleSolution.getClients(), nouvelleSolution.getNombreVoiture(), nouvelleSolution.getTournees(), nouvelleSolution.getCoutTotal(), nouvelleSolution.getCapacite());
                     System.out.println("F meilleure solution : " + meilleureSolution.calculerCoutTotal() + "  & f actuelle : " + solutionActuelle.calculerCoutTotal());
                     if (meilleureSolution.calculerCoutTotal() > solutionActuelle.calculerCoutTotal() && solutionActuelle.isSolutionValide()) {
-                        meilleureSolution = solutionActuelle;
+                        meilleureSolution = new Solution(solutionActuelle.getClients(), solutionActuelle.getNombreVoiture(), solutionActuelle.getTournees(), solutionActuelle.getCoutTotal(), solutionActuelle.getCapacite());
                         System.out.println("PASSE");
                     }
                 }
                 // Acceptance du voisin ou non
                 else {
                     if (Math.random() <= Math.exp(-(deltaF) / tempActuelle)) {
-                        solutionActuelle = nouvelleSolution;
+                        solutionActuelle = new Solution(nouvelleSolution.getClients(), nouvelleSolution.getNombreVoiture(), nouvelleSolution.getTournees(), nouvelleSolution.getCoutTotal(), nouvelleSolution.getCapacite());
                     }
                 }
             }
