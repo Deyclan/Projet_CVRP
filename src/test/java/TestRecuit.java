@@ -4,11 +4,14 @@ import Utils.Client;
 import Utils.Solution;
 import Utils.SolutionGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class TestRecuit {
+
+    public static final int N1 = 10;
+    public static final int N2 = 2;
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -30,8 +33,8 @@ public class TestRecuit {
             e.printStackTrace();
         }
 
-        RecuitSimule recuitSimule = new RecuitSimule(10, 0.3, solution1, solutionGenerator);
-        Solution bestSolution = recuitSimule.lancerRecuit();
+        RecuitSimule recuitSimule = new RecuitSimule(100, 0.2, solution1, solutionGenerator);
+        Solution bestSolution = recuitSimule.lancerRecuit(N1, N2);
         System.out.println("SolutionRecuit");
         bestSolution.printTourneesId();
         System.out.println("Cout total : "+bestSolution.calculerCoutTotal());

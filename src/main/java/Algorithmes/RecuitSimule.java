@@ -17,14 +17,6 @@ public class RecuitSimule {
         this.solutionGenerator = solutionGenerator;
     }
 
-    private double probabiliteAcceptation(int distanceActuelle, int nvDistance, double temperature) {
-        // Si distance meilleure
-        if (nvDistance < distanceActuelle) {
-            return 1;
-        }
-        // Sinon, calculer le degré d'acceptation
-        return Math.exp((nvDistance - distanceActuelle) / temperature);
-    }
 
     private int choisirRandTournee(Solution solution) {
         return (int) (solution.getTournees().size() * Math.random());
@@ -34,57 +26,62 @@ public class RecuitSimule {
         return (int) (solution.getTournees().get(numTournee).size() * Math.random());
     }
 
-    public Solution lancerRecuit() {
+    public Solution lancerRecuit(int n1, int n2) {
         Solution meilleureSolution = this.solutionActuelle;
-        while (tempActuelle > 1) {
-            // Créer nouvelle solution
-            Solution nouvelleSolution = this.solutionActuelle;
-            // Choix du voisin
-            // On prend deux parcours différents aléatoiremment
-            int numTournee1, numTournee2;
-            numTournee1 = choisirRandTournee(nouvelleSolution);
-            do {
-                numTournee2 = choisirRandTournee(nouvelleSolution);
-            } while (numTournee1 == numTournee2);
+        for (int k = 0; k < n1; k++) {
+            for (int l = 1; l < n2; l++) {
+                // Choix du voisin
+                Solution nouvelleSolution = this.solutionActuelle;
+                // On prend deux parcours différents aléatoiremment
+                int numTournee1, numTournee2;
+                numTournee1 = choisirRandTournee(nouvelleSolution);
+                do {
+                    numTournee2 = choisirRandTournee(nouvelleSolution);
+                } while (numTournee1 == numTournee2);
 
-            // On choisit des positions random (différemment du dépot)
-            int posClient1, posClient2;
-            int tailleTournee1 = nouvelleSolution.getTournees().get(numTournee1).size();
-            int tailleTournee2 = nouvelleSolution.getTournees().get(numTournee2).size();
-            do {
-                posClient1 = choisirRandClient(nouvelleSolution, numTournee1);
-                posClient2 = choisirRandClient(nouvelleSolution, numTournee2);
-            }
-            while (posClient1 == 0 || posClient1 == tailleTournee1 - 1 || posClient2 == 0 || posClient2 == tailleTournee2 - 1);
+                // On choisit des positions random (différemment du dépot)
+                int posClient1, posClient2;
+                int tailleTournee1 = nouvelleSolution.getTournees().get(numTournee1).size();
+                do {
+                    posClient1 = choisirRandClient(nouvelleSolution, numTournee1);
+                } while (posClient1 == 0 || posClient1 == tailleTournee1 - 1);
 
-            // Echanger les clients de tournées différentes
-            solutionGenerator.permuteClientFromPosi(nouvelleSolution, numTournee1, numTournee2, posClient1, posClient2);
+                int tailleTournee2 = nouvelleSolution.getTournees().get(numTournee2).size();
+                do {
+                    posClient2 = choisirRandClient(nouvelleSolution, numTournee2);
+                } while (posClient2 == 0 || posClient2 == tailleTournee2 - 1);
 
-            // TODO algo optimisation locale
+                // Echanger les clients de tournées différentes
+                solutionGenerator.permuteClientFromPosi(nouvelleSolution, numTournee1, numTournee2, posClient1, posClient2);
 
-            // Calcule delta f
-            int fActuel = (int) solutionActuelle.calculerCoutTotal();
-            int fVoisin = (int) nouvelleSolution.calculerCoutTotal();
-            int deltaF = fVoisin - fActuel;
+                // Optimisation locale
+                // Client depot = nouvelleSolution.getTournees().get(numTournee1).get(0);
+                // Dijkstra dijkstra = new Dijkstra();
+                // dijkstra.optimiserTournee(nouvelleSolution.getTournees().get(numTournee1), depot);
+                // dijkstra.optimiserTournee(nouvelleSolution.getTournees().get(numTournee2), depot);
 
-            if (deltaF <= 0) {
-                solutionActuelle = nouvelleSolution;
-                // Mettre à jour la meilleure solution
-                if (solutionActuelle.calculerCoutTotal() < meilleureSolution.calculerCoutTotal()) {
-                    meilleureSolution = solutionActuelle;
-                }
-            }
+                // Calcule delta f
+                double deltaF = nouvelleSolution.calculerCoutTotal() - solutionActuelle.calculerCoutTotal();
 
-            // Acceptance du voisin ou non
-            else {
-                if (probabiliteAcceptation(fActuel, fVoisin, tempActuelle) >= Math.random()) {
+                if (deltaF <= 0) {
+                    // Mettre à jour la meilleure solution
                     solutionActuelle = nouvelleSolution;
+                    if (solutionActuelle.calculerCoutTotal() < meilleureSolution.calculerCoutTotal()) {
+                        meilleureSolution = solutionActuelle;
+                    }
+                }
+                // Acceptance du voisin ou non
+                else {
+                    if (Math.random() <= Math.exp(-(deltaF) / tempActuelle)) {
+                        solutionActuelle = nouvelleSolution;
+                    }
                 }
             }
 
             // Refroidissement
             tempActuelle *= 1 - tempRefroidissement;
         }
+
         return meilleureSolution;
     }
 }

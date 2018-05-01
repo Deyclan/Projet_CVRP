@@ -14,6 +14,9 @@ public class Client {
         this.quatiteCommande = quantiteCommande;
     }
 
+    public Client() {
+    }
+
     public int getId() {
         return id;
     }
