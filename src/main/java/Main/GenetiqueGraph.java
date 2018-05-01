@@ -7,14 +7,15 @@ import Utils.Client;
 import Utils.Constants;
 import Utils.Solution;
 import Utils.SolutionGenerator;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class MainGenetique {
+public class GenetiqueGraph extends Application{
 
     private static int NUMERO_DATA = 1;
     private static int TAILLE_DE_LA_LISTE_DE_DEPART = 100;
@@ -23,7 +24,8 @@ public class MainGenetique {
     private static int NOMBRE_CROISEMENT = 20;
     private static int NOMBRE_MUTATION = 20;
 
-    public static void main(String[] args) {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         try{
             Scanner scanner = new Scanner(System.in);
 
@@ -66,6 +68,7 @@ public class MainGenetique {
             bestEvolue.printTourneesId();
             bestEvolue.printCoutTotal();
 
+            Graph graph = new Graph(bestEvolue);
 
         }catch (Exception e){
             e.printStackTrace();
