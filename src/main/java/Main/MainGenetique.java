@@ -12,7 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class MainGenetique {
 
     private static int NUMERO_DATA = 1;
     private static int TAILLE_DE_LA_LISTE_DE_DEPART = 100;
