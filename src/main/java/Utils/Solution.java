@@ -1,5 +1,7 @@
 package Utils;
 
+import Algorithmes.Dijkstra;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -182,6 +184,49 @@ public class Solution {
         System.out.println(Constants.ANSI_CYAN + "Cout total solution : "+getCoutTotal() + Constants.ANSI_RESET);
     }
 
+    public Solution deepCopy(){
+        Solution deepCopy = new Solution();
+        int nombreVoiture = this.getNombreVoiture();
+        List<Client> newClientList = new ArrayList<>();
+        List<List<Client>> newTournees = new ArrayList<>();
+        double coutTotal = this.getCoutTotal();
+        int capacite = this.getCapacite();
+
+        for (List<Client> tournee : this.getTournees()) {
+            List<Client> tmp = new ArrayList<>();
+            for (Client client : tournee){
+                if (!newClientList.contains(client)) {
+                    newClientList.add(client);
+                }
+                tmp.add(client);
+            }
+            newTournees.add(tmp);
+        }
+
+        deepCopy.setCapacite(capacite);
+        deepCopy.setCoutTotal(coutTotal);
+        deepCopy.setTournees(newTournees);
+        deepCopy.setClients(newClientList);
+        deepCopy.setNombreVoiture(nombreVoiture);
+        return deepCopy;
+    }
+
+    public void optimiserTournee(){
+        Dijkstra dijkstra = new Dijkstra();
+        List<List<Client>> tourneeOpti = new ArrayList<>();
+        for (List<Client> tournee: this.tournees) {
+            int sizeTournee = tournee.size();
+            List<Client> opti = new ArrayList<>(tournee);
+            if (sizeTournee > 2) {
+                opti.remove(sizeTournee-1);
+                opti = dijkstra.calculateShortestPathFromSource(opti, opti.get(0));
+                opti.add(opti.get(0));
+            }
+            tourneeOpti.add(opti);
+        }
+        this.tournees = tourneeOpti;
+        this.calculerCoutTotal();
+    }
     /**
      * GETTERS & SETTERS
      */
@@ -209,4 +254,12 @@ public class Solution {
     }
     public int getCapacite() { return capacite; }
     public void setCapacite(int capacite) { this.capacite = capacite; }
+
+    private void setClients(List<Client> clients) {
+        this.clients = clients;
+    }
+
+    private void setNombreVoiture(int nombreVoiture) {
+        this.nombreVoiture = nombreVoiture;
+    }
 }

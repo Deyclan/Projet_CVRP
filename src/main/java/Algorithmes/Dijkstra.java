@@ -3,17 +3,54 @@ package Algorithmes;
 import Utils.Arc;
 import Utils.Client;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Dijkstra {
 
-    public void optimiserTournee(List<Client> clientsList, Client depart) {
-        ArrayList<Client> clients = new ArrayList<>();
-        for (Client c : clientsList) {
-            clients.add(c);
+    public List<Client> calculateShortestPathFromSource(List<Client> clientList, Client source) {
+        //source.setDistance(0);
+
+        List<Client> voisins = new ArrayList<>();
+        for (Client client : clientList){
+            if (client.getId() != source.getId()){
+                voisins.add(client);
+            }
         }
+
+        ArrayList<Client> settledNodes = new ArrayList<>();
+        ArrayList<Client> unsettledNodes = new ArrayList<>();
+        unsettledNodes.addAll(clientList);
+
+        while (unsettledNodes.size() != 0) { // Peut etre a mettre a 1
+
+            Client plusProcheClient = getLowestDistanceNode(unsettledNodes, source);
+            unsettledNodes.remove(plusProcheClient);
+
+            settledNodes.add(plusProcheClient);
+            source = plusProcheClient;
+        }
+        return settledNodes;
+    }
+
+    private static Client getLowestDistanceNode(ArrayList<Client> unsettledNodes, Client source) {
+        Client plusProcheClient = null;
+        double plusCourteDistance = Integer.MAX_VALUE;
+        for (Client client: unsettledNodes) {
+            double clientDistance = client.distanceTo(source);
+            if (clientDistance < plusCourteDistance) {
+                plusCourteDistance = clientDistance;
+                plusProcheClient = client;
+            }
+        }
+        return plusProcheClient;
+    }
+
+    public void optimiserTournee(List<Client> clientsList, Client depart) {
+        // Copie de la liste des clients
+        List<Client> clients = new ArrayList<>();
+        clients.addAll(clientsList);
+
         Client clientActuel = depart;
         Arc tmp;
         HashMap<Client, Double> lambda = new HashMap<>();

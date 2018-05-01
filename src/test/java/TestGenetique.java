@@ -1,12 +1,10 @@
 import Algorithmes.Genetique;
 import Utils.Client;
+import Utils.Constants;
 import Utils.Solution;
 import Utils.SolutionGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class TestGenetique {
     public static void main(String[] args) {
@@ -76,6 +74,17 @@ public class TestGenetique {
         for (Solution solution: evolved) {
             solution.printTourneesId();
         }
+        Solution bestEvolue = evolved.stream().sorted(Comparator.comparing(Solution::getCoutTotal)).findFirst().get();
+        System.out.println(Constants.ANSI_RED + "Meilleure solution : " + Constants.ANSI_RESET);
+        bestEvolue.printTourneesId();
+        System.out.println(Constants.ANSI_CYAN + "Cout : " + bestEvolue.getCoutTotal() + Constants.ANSI_RESET);
+        System.out.println();
+        System.out.println(Constants.ANSI_RED + "Optimisation de la meilleur solution" + Constants.ANSI_RESET);
+        bestEvolue.optimiserTournee();
+        bestEvolue.printTourneesId();
+        System.out.println(Constants.ANSI_CYAN + "Cout : " + bestEvolue.getCoutTotal() + Constants.ANSI_RESET);
+        System.out.println();
+
     }
 
 }

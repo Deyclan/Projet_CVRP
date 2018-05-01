@@ -28,6 +28,11 @@ public class Genetique {
             tempPopulation.addAll(reproduites);
             tempPopulation.addAll(croisees);
             tempPopulation.addAll(mutantes);
+            if (x % 100 == 0){
+                for (Solution solution : tempPopulation){
+                    solution.optimiserTournee();
+                }
+            }
             populationEvoluee = tempPopulation;
         }
         return populationEvoluee;
@@ -149,12 +154,15 @@ public class Genetique {
         int sizeTournee1 = tournee1.size();
         int sizeTournee2 = tournee2.size();
 
-        if (sizeTournee1 <= 2){
+        int count = 0;
+        while (sizeTournee1 <= 2 && count < 1000000){
             randTournee1 = (randTournee1+1)%nbTournee;
             tournee1 = solution.getTournees().get(randTournee1);
             sizeTournee1 = tournee1.size();
+            count++;
         }
-        if (sizeTournee2 <= 2){
+        count = 0;
+        while (sizeTournee2 <= 2 && count < 1000000){
             randTournee2 = (randTournee2+1)%nbTournee;
             tournee2 = solution.getTournees().get(randTournee1);
             sizeTournee2 = tournee2.size();

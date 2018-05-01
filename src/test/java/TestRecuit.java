@@ -29,14 +29,18 @@ public class TestRecuit {
             System.out.println("Solution1");
             solution1.printTourneesId();
             System.out.println("Cout total : "+solution1.calculerCoutTotal());
+
+
+            RecuitSimule recuitSimule = new RecuitSimule(100, 0.2, solution1, solutionGenerator);
+            Solution bestSolution = recuitSimule.lancerRecuit(N1, N2);
+            System.out.println("SolutionRecuit");
+            bestSolution.printTourneesId();
+            System.out.println("Cout total : "+bestSolution.calculerCoutTotal());
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        RecuitSimule recuitSimule = new RecuitSimule(100, 0.2, solution1, solutionGenerator);
-        Solution bestSolution = recuitSimule.lancerRecuit(N1, N2);
-        System.out.println("SolutionRecuit");
-        bestSolution.printTourneesId();
-        System.out.println("Cout total : "+bestSolution.calculerCoutTotal());
     }
 }

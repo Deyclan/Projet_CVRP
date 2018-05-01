@@ -15,14 +15,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class GenetiqueGraph extends Application{
+public class MainGenetiqueGraph extends Application{
 
     private static int NUMERO_DATA = 1;
     private static int TAILLE_DE_LA_LISTE_DE_DEPART = 100;
-    private static int NOMBRE_DE_GENERATION = 100000;
-    private static int NOMBRE_REPRODUCTION = 60;
-    private static int NOMBRE_CROISEMENT = 20;
-    private static int NOMBRE_MUTATION = 20;
+    private static int NOMBRE_DE_GENERATION = 1000;
+    private static int NOMBRE_REPRODUCTION = 40;
+    private static int NOMBRE_CROISEMENT = 30;
+    private static int NOMBRE_MUTATION = 30;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -68,7 +68,16 @@ public class GenetiqueGraph extends Application{
             bestEvolue.printTourneesId();
             bestEvolue.printCoutTotal();
 
-            Graph graph = new Graph(bestEvolue);
+            new Graph(bestEvolue, "Résultat Genetique avant Optimisation");
+
+            bestEvolue.optimiserTournee();
+
+            System.out.println();
+            System.out.println(Constants.ANSI_RED+"Meilleur à l'arrivée avec optimisation locale: "+ Constants.ANSI_RESET);
+            bestEvolue.printTourneesId();
+            bestEvolue.printCoutTotal();
+
+            new Graph(bestEvolue, "Résultat Genetique après optimisation");
 
         }catch (Exception e){
             e.printStackTrace();

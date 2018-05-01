@@ -46,5 +46,8 @@ public class TestSolution {
         Solution solution = new Solution(clients, 2, tournees, 100);
         solution.printTournees();
 
+        Solution solution1 = solution.deepCopy();
+        solution1.printTournees();
+
     }
 }

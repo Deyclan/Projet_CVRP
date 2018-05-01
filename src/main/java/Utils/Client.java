@@ -61,4 +61,8 @@ public class Client {
         stringBuilder.append(" q : ").append(quatiteCommande);
         return stringBuilder.toString();
     }
+
+    public double distanceTo(Client client){
+        return Math.sqrt(Math.pow((this.getX() - client.getX()), 2) + Math.pow((this.getY() - client.getY()), 2));
+    }
 }

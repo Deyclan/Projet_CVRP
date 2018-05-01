@@ -1,7 +1,12 @@
 package Algorithmes;
 
+import Utils.Client;
+import Utils.Constants;
 import Utils.Solution;
 import Utils.SolutionGenerator;
+
+import java.util.List;
+import java.util.Random;
 
 public class RecuitSimule {
 
@@ -9,50 +14,44 @@ public class RecuitSimule {
     private double tempRefroidissement;
     private Solution solutionActuelle;
     private SolutionGenerator solutionGenerator;
+    private Random random = new Random();
+    private int nombreVoiture = 0;
+
+    private static int NOMBRE_BOUCLE_MAX = 1000000;
 
     public RecuitSimule(double tempInitiale, double tempRefroidissement, Solution solutionActuelle, SolutionGenerator solutionGenerator) {
         this.tempActuelle = tempInitiale;
         this.tempRefroidissement = tempRefroidissement;
         this.solutionActuelle = solutionActuelle;
         this.solutionGenerator = solutionGenerator;
+        this.nombreVoiture = solutionActuelle.getNombreVoiture();
     }
 
 
     private int choisirRandTournee(Solution solution) {
-        return (int) (solution.getTournees().size() * Math.random());
+        return random.nextInt(solution.getTournees().size());
     }
 
     private int choisirRandClient(Solution solution, int numTournee) {
-        return (int) (solution.getTournees().get(numTournee).size() * Math.random());
+        return random.nextInt(solution.getTournees().get(numTournee).size());
     }
 
-    public Solution lancerRecuit(int n1, int n2) {
-        Solution meilleureSolution = new Solution(solutionActuelle.getClients(), solutionActuelle.getNombreVoiture(), solutionActuelle.getTournees(), solutionActuelle.getCoutTotal(), solutionActuelle.getCapacite());
+    public Solution lancerRecuit(int n1, int n2)  {
+        Solution meilleureSolution = solutionActuelle.deepCopy();
         for (int k = 0; k < n1; k++) {
             for (int l = 1; l < n2; l++) {
                 // Choix du voisin
-                Solution nouvelleSolution = new Solution(solutionActuelle.getClients(), solutionActuelle.getNombreVoiture(), solutionActuelle.getTournees(), solutionActuelle.getCoutTotal(), solutionActuelle.getCapacite());
-                // On prend deux parcours différents aléatoiremment
-                int numTournee1, numTournee2;
-                numTournee1 = choisirRandTournee(nouvelleSolution);
-                do {
-                    numTournee2 = choisirRandTournee(nouvelleSolution);
-                } while (numTournee1 == numTournee2);
-
-                // On choisit des positions random (différemment du dépot)
-                int posClient1, posClient2;
-                int tailleTournee1 = nouvelleSolution.getTournees().get(numTournee1).size();
-                do {
-                    posClient1 = choisirRandClient(nouvelleSolution, numTournee1);
-                } while (posClient1 == 0 || posClient1 == tailleTournee1 - 1);
-
-                int tailleTournee2 = nouvelleSolution.getTournees().get(numTournee2).size();
-                do {
-                    posClient2 = choisirRandClient(nouvelleSolution, numTournee2);
-                } while (posClient2 == 0 || posClient2 == tailleTournee2 - 1);
-
-                // Echanger les clients de tournées différentes
-                solutionGenerator.permuteClientFromPosi(nouvelleSolution, numTournee1, numTournee2, posClient1, posClient2);
+                Solution tmpSolutionActuelle = solutionActuelle.deepCopy();
+                Solution nouvelleSolution = null;
+                int count = 0;
+                while (nouvelleSolution == null && count < NOMBRE_BOUCLE_MAX * nombreVoiture){
+                    nouvelleSolution = mutation(tmpSolutionActuelle);
+                    count++;
+                }
+                if (count == 1000 || nouvelleSolution == null){
+                    System.out.println(Constants.ANSI_RED + "Impossible de trouver un voisinage de la solution actuelle." +Constants.ANSI_RESET);
+                    return meilleureSolution;
+                }
 
                 // Optimisation locale
                 //Client depot = nouvelleSolution.getTournees().get(numTournee1).get(0);
@@ -60,22 +59,21 @@ public class RecuitSimule {
                 //dijkstra.optimiserTournee(nouvelleSolution.getTournees().get(numTournee1), depot);
                 //dijkstra.optimiserTournee(nouvelleSolution.getTournees().get(numTournee2), depot);
 
+
                 // Calcule delta f
                 double deltaF = nouvelleSolution.calculerCoutTotal() - solutionActuelle.calculerCoutTotal();
 
                 if (deltaF <= 0) {
                     // Mettre à jour la meilleure solution
-                    solutionActuelle = new Solution(nouvelleSolution.getClients(), nouvelleSolution.getNombreVoiture(), nouvelleSolution.getTournees(), nouvelleSolution.getCoutTotal(), nouvelleSolution.getCapacite());
-                    System.out.println("F meilleure solution : " + meilleureSolution.calculerCoutTotal() + "  & f actuelle : " + solutionActuelle.calculerCoutTotal());
-                    if (meilleureSolution.calculerCoutTotal() > solutionActuelle.calculerCoutTotal() && solutionActuelle.isSolutionValide()) {
+                    solutionActuelle = nouvelleSolution.deepCopy();
+                    if (meilleureSolution.calculerCoutTotal() > solutionActuelle.calculerCoutTotal() /* && solutionActuelle.isSolutionValide() */) {
                         meilleureSolution = solutionActuelle;
-                        System.out.println("PASSE");
                     }
                 }
                 // Acceptance du voisin ou non
                 else {
                     if (Math.random() <= Math.exp(-(deltaF) / tempActuelle)) {
-                        solutionActuelle = nouvelleSolution;
+                        solutionActuelle = nouvelleSolution.deepCopy();
                     }
                 }
             }
@@ -85,5 +83,46 @@ public class RecuitSimule {
         }
 
         return meilleureSolution;
+    }
+
+    private Solution mutation(Solution solution){
+        int nbTournee = solution.getTournees().size();
+        int randTournee1 = random.nextInt(nbTournee);
+        int randTournee2 = random.nextInt(nbTournee);
+        List<Client> tournee1 = solution.getTournees().get(randTournee1);
+        List<Client> tournee2 = solution.getTournees().get(randTournee2);
+
+        int sizeTournee1 = tournee1.size();
+        int sizeTournee2 = tournee2.size();
+
+        if (sizeTournee1 <= 2){
+            randTournee1 = (randTournee1+1)%nbTournee;
+            tournee1 = solution.getTournees().get(randTournee1);
+            sizeTournee1 = tournee1.size();
+        }
+        if (sizeTournee2 <= 2){
+            randTournee2 = (randTournee2+1)%nbTournee;
+            tournee2 = solution.getTournees().get(randTournee1);
+            sizeTournee2 = tournee2.size();
+        }
+
+        int randClient1 = random.nextInt(sizeTournee1-2)+1;
+        int randClient2 = random.nextInt(sizeTournee2-2)+1;
+
+        Client client1 = tournee1.get(randClient1);
+        Client client2 = tournee2.get(randClient2);
+
+        tournee1.set(randClient1, client2);
+        tournee2.set(randClient2, client1);
+
+        solution.getTournees().set(randTournee1, tournee1);
+        solution.getTournees().set(randTournee2, tournee2);
+
+        solution.calculerCoutTotal();
+
+        if (solution.isSolutionValide()){
+            return solution;
+        }
+        else return null;
     }
 }
