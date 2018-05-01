@@ -27,11 +27,11 @@ public class RecuitSimule {
     }
 
     public Solution lancerRecuit(int n1, int n2) {
-        Solution meilleureSolution = this.solutionActuelle;
+        Solution meilleureSolution = new Solution(solutionActuelle.getClients(), solutionActuelle.getNombreVoiture(), solutionActuelle.getTournees(), solutionActuelle.getCoutTotal(), solutionActuelle.getCapacite());
         for (int k = 0; k < n1; k++) {
             for (int l = 1; l < n2; l++) {
                 // Choix du voisin
-                Solution nouvelleSolution = this.solutionActuelle;
+                Solution nouvelleSolution = new Solution(solutionActuelle.getClients(), solutionActuelle.getNombreVoiture(), solutionActuelle.getTournees(), solutionActuelle.getCoutTotal(), solutionActuelle.getCapacite());
                 // On prend deux parcours différents aléatoiremment
                 int numTournee1, numTournee2;
                 numTournee1 = choisirRandTournee(nouvelleSolution);
@@ -55,19 +55,21 @@ public class RecuitSimule {
                 solutionGenerator.permuteClientFromPosi(nouvelleSolution, numTournee1, numTournee2, posClient1, posClient2);
 
                 // Optimisation locale
-                // Client depot = nouvelleSolution.getTournees().get(numTournee1).get(0);
-                // Dijkstra dijkstra = new Dijkstra();
-                // dijkstra.optimiserTournee(nouvelleSolution.getTournees().get(numTournee1), depot);
-                // dijkstra.optimiserTournee(nouvelleSolution.getTournees().get(numTournee2), depot);
+                //Client depot = nouvelleSolution.getTournees().get(numTournee1).get(0);
+                //Dijkstra dijkstra = new Dijkstra();
+                //dijkstra.optimiserTournee(nouvelleSolution.getTournees().get(numTournee1), depot);
+                //dijkstra.optimiserTournee(nouvelleSolution.getTournees().get(numTournee2), depot);
 
                 // Calcule delta f
                 double deltaF = nouvelleSolution.calculerCoutTotal() - solutionActuelle.calculerCoutTotal();
 
                 if (deltaF <= 0) {
                     // Mettre à jour la meilleure solution
-                    solutionActuelle = nouvelleSolution;
-                    if (solutionActuelle.calculerCoutTotal() < meilleureSolution.calculerCoutTotal()) {
+                    solutionActuelle = new Solution(nouvelleSolution.getClients(), nouvelleSolution.getNombreVoiture(), nouvelleSolution.getTournees(), nouvelleSolution.getCoutTotal(), nouvelleSolution.getCapacite());
+                    System.out.println("F meilleure solution : " + meilleureSolution.calculerCoutTotal() + "  & f actuelle : " + solutionActuelle.calculerCoutTotal());
+                    if (meilleureSolution.calculerCoutTotal() > solutionActuelle.calculerCoutTotal() && solutionActuelle.isSolutionValide()) {
                         meilleureSolution = solutionActuelle;
+                        System.out.println("PASSE");
                     }
                 }
                 // Acceptance du voisin ou non
