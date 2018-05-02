@@ -173,10 +173,22 @@ public class Solution {
 
         for (List<Client> tournee : tournees) {
             System.out.println("Tournee " + numeroTournee);
-            System.out.println(tournee.stream()
+            System.out.print(tournee.stream()
                     .map(c -> c.getId() + "")
                     .collect(Collectors.joining(" => ")));
             numeroTournee++;
+            double dist = 0;
+            Client last = null;
+            for (Client client : tournee){
+                if(last == null){
+                    last = client;
+                }
+                else {
+                    dist += client.distanceTo(last);
+                    last = client;
+                }
+            }
+            System.out.println(Constants.ANSI_CYAN + "\t cout tournee : " + dist + Constants.ANSI_RESET);
         }
     }
 
@@ -222,7 +234,12 @@ public class Solution {
                 opti = dijkstra.calculateShortestPathFromSource(opti, opti.get(0));
                 opti.add(opti.get(0));
             }
-            tourneeOpti.add(opti);
+            double coutTotOpti = coutTournee(opti);
+            if (coutTotOpti < coutTournee(tournee)) {
+                tourneeOpti.add(opti);
+            }else {
+                tourneeOpti.add(tournee);
+            }
         }
         this.tournees = tourneeOpti;
         this.calculerCoutTotal();

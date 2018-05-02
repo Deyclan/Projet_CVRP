@@ -72,6 +72,7 @@ public class TestGenetique {
         List<Solution> evolved = genetique.lancerGenetique(5,5,3,2,50);
         System.out.println("EVOLVED SOLUTIONS");
         for (Solution solution: evolved) {
+            System.out.println();
             solution.printTourneesId();
         }
         Solution bestEvolue = evolved.stream().sorted(Comparator.comparing(Solution::getCoutTotal)).findFirst().get();

@@ -28,7 +28,7 @@ public class Genetique {
             tempPopulation.addAll(reproduites);
             tempPopulation.addAll(croisees);
             tempPopulation.addAll(mutantes);
-            if (x % 100 == 0){
+            if (x == 0){
                 for (Solution solution : tempPopulation){
                     solution.optimiserTournee();
                 }
@@ -123,7 +123,7 @@ public class Genetique {
         int count = 0;
         while (nextGenPop.size() < nbElement && count < nbEtapeMax){
             Solution tmp = population.get(random.nextInt(population.size()));
-            Solution solution = new Solution(tmp.getClients(), tmp.getNombreVoiture(), tmp.getTournees(), tmp.getCoutTotal(), tmp.getCapacite());
+            Solution solution = tmp.deepCopy();
             Solution mutante = mutation(solution);
             if (mutante != null){
                 nextGenPop.add(mutante);
