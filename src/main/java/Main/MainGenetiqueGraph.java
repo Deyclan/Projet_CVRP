@@ -17,12 +17,12 @@ import java.util.Scanner;
 
 public class MainGenetiqueGraph extends Application{
 
-    private static int NUMERO_DATA = 5;
-    private static int TAILLE_DE_LA_LISTE_DE_DEPART = 100;
-    private static int NOMBRE_DE_GENERATION = 10000;
-    private static int NOMBRE_REPRODUCTION = 20;
-    private static int NOMBRE_CROISEMENT = 40;
-    private static int NOMBRE_MUTATION = 40;
+    private static int NUMERO_DATA = 1;
+    private static int TAILLE_DE_LA_LISTE_DE_DEPART = 10000;
+    private static int NOMBRE_DE_GENERATION = 100000;
+    private static int NOMBRE_REPRODUCTION = 2000;
+    private static int NOMBRE_CROISEMENT = 3000;
+    private static int NOMBRE_MUTATION = 5000;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -72,7 +72,7 @@ public class MainGenetiqueGraph extends Application{
             bestEvolue.printCoutTotal();
 
 
-            new Graph(bestEvolue, "Résultat Genetique avant Optimisation. Cout : " + bestEvolue.calculerCoutTotal());
+            new Graph(bestEvolue, "Résultat Genetique. Cout : " + bestEvolue.calculerCoutTotal());
 
             bestEvolue.optimiserTournee();
 

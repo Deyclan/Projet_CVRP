@@ -188,12 +188,12 @@ public class Solution {
                     last = client;
                 }
             }
-            System.out.println(Constants.ANSI_CYAN + "\t cout tournee : " + dist + Constants.ANSI_RESET);
+            System.out.println("\t cout tournee : " + dist );
         }
     }
 
     public void printCoutTotal(){
-        System.out.println(Constants.ANSI_CYAN + "Cout total solution : "+getCoutTotal() + Constants.ANSI_RESET);
+        System.out.println("Cout total solution : "+getCoutTotal());
     }
 
     public Solution deepCopy(){

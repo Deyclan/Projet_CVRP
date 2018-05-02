@@ -43,6 +43,7 @@ public class Graph extends Stage {
         this.setWidth(graphicWidth);
         this.setHeight(graphicHeigh);
         this.setTitle(title);
+        this.setResizable(false);
 
         pointList = new ArrayList<>();
         clientList = new ArrayList<>();
